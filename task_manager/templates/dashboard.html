@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h3 class="mb-0">My Tasks</h3>
+    <a href="/add_task" class="btn btn-primary">+ Add Task</a>
+</div>
+{% if tasks %}
+<div class="table-responsive">
+    <table class="table table-bordered table-hover align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Due Date</th>
+                <th>Priority</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for task in tasks %}
+            <tr>
+                <td class="fw-semibold">{{ task["title"] }}</td>
+                <td class="text-muted">{{ task["description"] or "—" }}</td>
+                <td>{{ task["due_date"] }}</td>
+                <td>
+                    <span class="badge {% if task['priority'] == 'high' %}bg-danger{% elif task['priority'] == 'medium' %}bg-warning text-dark{% else %}bg-success{% endif %}">
+                        {{ task["priority"] }}
+                    </span>
+                </td>
+                <td>
+                    <span class="badge {% if task['status'] == 'done' %}bg-success{% elif task['status'] == 'in_progress' %}bg-primary{% else %}bg-secondary{% endif %}">
+                        {{ task["status"] }}
+                    </span>
+                </td>
+                <td>
+                    <div class="d-flex gap-1 flex-wrap">
+                        <a href="/edit_task/{{ task['id'] }}" class="btn btn-outline-secondary btn-sm">Edit</a>
+                        <a href="/update_task/{{ task['id'] }}/in_progress" class="btn btn-warning btn-sm">In Progress</a>
+                        <a href="/update_task/{{ task['id'] }}/done" class="btn btn-success btn-sm">Done</a>
+                        <a href="/delete_task/{{ task['id'] }}" class="btn btn-danger btn-sm" onclick="return confirm('Delete this task?')">Delete</a>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="alert alert-info text-center py-4">
+    <h5>No tasks yet!</h5>
+    <p class="mb-0">Click <strong>+ Add Task</strong> to get started.</p>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <h3 class="mb-4">{{ "Edit Task" if task else "Add New Task" }}</h3>
+                <form method="POST">
+                    <div class="mb-3">
+                        <label class="form-label">Title</label>
+                        <input type="text" name="title" class="form-control" value="{{ task['title'] if task else '' }}" required autofocus>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        <textarea name="description" class="form-control" rows="3">{{ task['description'] if task else '' }}</textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Due Date</label>
+                        <input type="datetime-local" name="due_date" class="form-control" value="{{ task['due_date'] if task else '' }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Priority</label>
+                        <select name="priority" class="form-control">
+                            <option value="low" {{ 'selected' if task and task['priority'] == 'low' }}>Low</option>
+                            <option value="medium" {{ 'selected' if (task and task['priority'] == 'medium') or not task }}>Medium</option>
+                            <option value="high" {{ 'selected' if task and task['priority'] == 'high' }}>High</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label">Reminders</label>
+                        <div class="form-check">
+                            <input type="checkbox" name="remind_email" class="form-check-input" {{ 'checked' if not task or task['remind_email'] }}>
+                            <label class="form-check-label">Email Reminder</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" name="remind_sms" class="form-check-input" {{ 'checked' if task and task['remind_sms'] }}>
+                            <label class="form-check-label">SMS Reminder</label>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary w-100">{{ "Update Task" if task else "Save Task" }}</button>
+                        <a href="/" class="btn btn-outline-secondary w-100">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
